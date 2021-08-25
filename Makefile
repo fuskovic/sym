@@ -3,7 +3,7 @@ fmt:
 	@goimports -w *.go
 
 .PHONY: lint
-lint: fmt
+lint:
 	@golangci-lint run -v
 
 .PHONY: test
