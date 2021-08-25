@@ -10,12 +10,12 @@ import (
 )
 
 // EncryptBytes uses key to encrypt plaintext; returning the ciphertext bytes.
-func EncryptBytes(key, plaintextBytes []byte) ([]byte, error) {
+func EncryptBytes(key string, plaintextBytes []byte) ([]byte, error) {
 	if len(plaintextBytes) == 0 || plaintextBytes == nil {
 		return nil, ErrEmptyPayload
 	}
 
-	block, err := aes.NewCipher(key)
+	block, err := aes.NewCipher([]byte(key))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create new aes cipher block: %w", err)
 	}
@@ -44,7 +44,7 @@ func EncryptFile(key, in, out string) error {
 		return fmt.Errorf("failed to read in file %q: %w", in, err)
 	}
 
-	ciphertext, err := EncryptBytes([]byte(key), plaintext)
+	ciphertext, err := EncryptBytes(key, plaintext)
 	if err != nil {
 		return fmt.Errorf("failed to encrypt %q: %w", in, err)
 	}
@@ -53,7 +53,7 @@ func EncryptFile(key, in, out string) error {
 
 // EncryptString uses key to encrypt plaintext; returning the ciphertext string.
 func EncryptString(key, plaintext string) (string, error) {
-	plaintextBytes, err := EncryptBytes([]byte(key), []byte(plaintext))
+	plaintextBytes, err := EncryptBytes(key, []byte(plaintext))
 	if err != nil {
 		return "", err
 	}

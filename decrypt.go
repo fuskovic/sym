@@ -15,12 +15,12 @@ var ErrEmptyPayload = errors.New("empty payload")
 var ErrInvalidIvLen = errors.New("cipher text does not contain a valid initialization vector length")
 
 // DecryptBytes uses key to return the decrypted content of 'ciphertextBytes'.
-func DecryptBytes(key, ciphertextBytes []byte) ([]byte, error) {
+func DecryptBytes(key string, ciphertextBytes []byte) ([]byte, error) {
 	if len(ciphertextBytes) == 0 || ciphertextBytes == nil {
 		return nil, ErrEmptyPayload
 	}
 
-	block, err := aes.NewCipher(key)
+	block, err := aes.NewCipher([]byte(key))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create new block cipher: %w", err)
 	}
@@ -49,7 +49,7 @@ func DecryptFile(key, in, out string) error {
 		return fmt.Errorf("failed to read in file %q: %w", in, err)
 	}
 
-	plaintext, err := DecryptBytes([]byte(key), ciphertext)
+	plaintext, err := DecryptBytes(key, ciphertext)
 	if err != nil {
 		return fmt.Errorf("failed to encrypt %q: %w", in, err)
 	}
@@ -58,7 +58,7 @@ func DecryptFile(key, in, out string) error {
 
 // DecryptString uses key to return the decrypted string contents of ciphertext.
 func DecryptString(key, ciphertext string) (string, error) {
-	plaintextBytes, err := DecryptBytes([]byte(key), []byte(ciphertext))
+	plaintextBytes, err := DecryptBytes(key, []byte(ciphertext))
 	if err != nil {
 		return "", err
 	}

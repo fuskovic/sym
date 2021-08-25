@@ -38,29 +38,29 @@ func TestEncrypt(t *testing.T) {
 			t.Parallel()
 			// encrypt
 			expected := []byte("skafiskafnjak")
-			ciphertext, err := EncryptBytes(validSymmetricKeyBytes, expected)
+			ciphertext, err := EncryptBytes(validSymmetricKey, expected)
 			require.NoError(t, err)
 			require.NotEqual(t, expected, ciphertext)
 
 			// decrypt
-			got, err := DecryptBytes(validSymmetricKeyBytes, ciphertext)
+			got, err := DecryptBytes(validSymmetricKey, ciphertext)
 			require.NoError(t, err)
 			require.Equal(t, expected, got)
 		})
 		t.Run("should fail if symmetric key length is invalid", func(t *testing.T) {
 			t.Parallel()
-			invalidSymmetricKeyBytes := []byte("")
-			_, err := EncryptBytes(invalidSymmetricKeyBytes, nil)
+			invalidSymmetricKey := ""
+			_, err := EncryptBytes(invalidSymmetricKey, nil)
 			require.Error(t, err)
 		})
 		t.Run("should fail if plaintext bytes are empty", func(t *testing.T) {
 			t.Parallel()
-			_, err := EncryptBytes(validSymmetricKeyBytes, []byte{})
+			_, err := EncryptBytes(validSymmetricKey, []byte{})
 			require.Error(t, err)
 		})
 		t.Run("should fail if plaintext bytes are nil", func(t *testing.T) {
 			t.Parallel()
-			_, err := EncryptBytes(validSymmetricKeyBytes, nil)
+			_, err := EncryptBytes(validSymmetricKey, nil)
 			require.Error(t, err)
 		})
 	})

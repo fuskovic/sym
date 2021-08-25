@@ -7,10 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-var (
-	validSymmetricKey      = "rand16CharString"
-	validSymmetricKeyBytes = []byte(validSymmetricKey)
-)
+const validSymmetricKey = "rand16CharString"
 
 func TestDecrypt(t *testing.T) {
 	t.Parallel()
@@ -48,34 +45,34 @@ func TestDecrypt(t *testing.T) {
 			t.Parallel()
 			// encrypt
 			expected := []byte("skafiskafnjak")
-			ciphertext, err := EncryptBytes(validSymmetricKeyBytes, expected)
+			ciphertext, err := EncryptBytes(validSymmetricKey, expected)
 			require.NoError(t, err)
 			require.NotEqual(t, expected, ciphertext)
 
 			// decrypt
-			got, err := DecryptBytes(validSymmetricKeyBytes, ciphertext)
+			got, err := DecryptBytes(validSymmetricKey, ciphertext)
 			require.NoError(t, err)
 			require.Equal(t, expected, got)
 		})
 		t.Run("should fail if symmetric key length is invalid", func(t *testing.T) {
 			t.Parallel()
-			invalidSymmetricKeyBytes := []byte("")
-			_, err := DecryptBytes(invalidSymmetricKeyBytes, []byte("dummyciphertext"))
+			invalidSymmetricKey := ""
+			_, err := DecryptBytes(invalidSymmetricKey, []byte("dummyciphertext"))
 			require.Error(t, err)
 		})
 		t.Run("should fail if ciphertext bytes are empty", func(t *testing.T) {
 			t.Parallel()
-			_, err := DecryptBytes(validSymmetricKeyBytes, []byte{})
+			_, err := DecryptBytes(validSymmetricKey, []byte{})
 			require.Error(t, err)
 		})
 		t.Run("should fail if ciphertext bytes are nil", func(t *testing.T) {
 			t.Parallel()
-			_, err := DecryptBytes(validSymmetricKeyBytes, nil)
+			_, err := DecryptBytes(validSymmetricKey, nil)
 			require.Error(t, err)
 		})
 		t.Run("should fail if ciphertext bytes is not at least the valid length of an initialization vector", func(t *testing.T) {
 			t.Parallel()
-			_, err := DecryptBytes(validSymmetricKeyBytes, []byte("tooshort"))
+			_, err := DecryptBytes(validSymmetricKey, []byte("tooshort"))
 			require.Error(t, err)
 		})
 	})
