@@ -80,12 +80,12 @@ func TestDecrypt(t *testing.T) {
 			t.Parallel()
 			// create in file
 			expectedPlaintextBytes := []byte("skafiskafnjak")
-			inFilePath := "test_in_file.txt"
+			inFilePath := randomStringOfLen(10)+"test_in_file.txt"
 			require.NoError(t, os.WriteFile(inFilePath, expectedPlaintextBytes, 0777))
 			defer os.Remove(inFilePath)
 
 			// create out file
-			outFilePath := "test_out_file.txt"
+			outFilePath := randomStringOfLen(10)+"test_out_file.txt"
 			outFile, err := os.Create(outFilePath)
 			require.NoError(t, err)
 			defer func() {
@@ -103,7 +103,7 @@ func TestDecrypt(t *testing.T) {
 			require.NotEqual(t, expectedPlaintextBytes, ciphertextBytes)
 
 			// decrypt the out file contents into a new file
-			decryptedFilePath := "decrypted.txt"
+			decryptedFilePath := randomStringOfLen(10)+"decrypted.txt"
 			require.NoError(t, DecryptFile(validSymmetricKey, outFilePath, decryptedFilePath))
 			defer os.Remove(decryptedFilePath)
 

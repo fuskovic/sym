@@ -1,8 +1,10 @@
 package sym
 
 import (
+	"math/rand"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 )
@@ -68,14 +70,14 @@ func TestEncrypt(t *testing.T) {
 			t.Parallel()
 			// create in file
 			expectedPlaintextBytes := []byte("skafiskafnjak")
-			inFilePath := "test_in_file.txt"
+			inFilePath := randomStringOfLen(10)+"test_in_file.txt"
 			require.NoError(t, os.WriteFile(inFilePath, expectedPlaintextBytes, 0777))
 			defer func() {
 				_ = os.Remove(inFilePath)
 			}()
 
 			// create out file
-			outFilePath := "test_out_file.txt"
+			outFilePath := randomStringOfLen(10)+"test_out_file.txt"
 			outFile, err := os.Create(outFilePath)
 			require.NoError(t, err)
 			defer func() {
@@ -93,4 +95,14 @@ func TestEncrypt(t *testing.T) {
 			require.NotEqual(t, expectedPlaintextBytes, ciphertextBytes)
 		})
 	})
+}
+
+func randomStringOfLen(n int) string {
+	letters := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	rand.Seed(time.Now().UnixNano())
+    b := make([]rune, n)
+    for i := range b {
+        b[i] = letters[rand.Intn(len(letters))]
+    }
+    return string(b)
 }
