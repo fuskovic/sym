@@ -9,3 +9,7 @@ lint:
 .PHONY: test
 test:
 	@go test -v . 
+
+.PHONY: coverage
+coverage:
+	@./scripts/generate_test_coverage_report.sh $(mode)
