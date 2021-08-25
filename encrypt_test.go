@@ -23,7 +23,7 @@ func TestEncrypt(t *testing.T) {
 		})
 		t.Run("should fail if symmetric key length is invalid", func(t *testing.T) {
 			t.Parallel()
-			_, err := EncryptString("", "")
+			_, err := EncryptString("", "plaintext")
 			require.Error(t, err)
 		})
 		t.Run("should fail if plaintext string is empty", func(t *testing.T) {
@@ -70,14 +70,14 @@ func TestEncrypt(t *testing.T) {
 			t.Parallel()
 			// create in file
 			expectedPlaintextBytes := []byte("skafiskafnjak")
-			inFilePath := randomStringOfLen(10)+"test_in_file.txt"
+			inFilePath := randomStringOfLen(10) + "test_in_file.txt"
 			require.NoError(t, os.WriteFile(inFilePath, expectedPlaintextBytes, 0777))
 			defer func() {
 				_ = os.Remove(inFilePath)
 			}()
 
 			// create out file
-			outFilePath := randomStringOfLen(10)+"test_out_file.txt"
+			outFilePath := randomStringOfLen(11) + "test_out_file.txt"
 			outFile, err := os.Create(outFilePath)
 			require.NoError(t, err)
 			defer func() {
@@ -94,15 +94,19 @@ func TestEncrypt(t *testing.T) {
 			require.NotNil(t, ciphertextBytes)
 			require.NotEqual(t, expectedPlaintextBytes, ciphertextBytes)
 		})
+		t.Run("should fail if file does not exist", func(t *testing.T) {
+			t.Parallel()
+			require.Error(t, EncryptFile(validSymmetricKey, "doesntexist", "doesntexist"))
+		})
 	})
 }
 
 func randomStringOfLen(n int) string {
 	letters := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	rand.Seed(time.Now().UnixNano())
-    b := make([]rune, n)
-    for i := range b {
-        b[i] = letters[rand.Intn(len(letters))]
-    }
-    return string(b)
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(b)
 }

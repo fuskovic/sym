@@ -33,7 +33,7 @@ func TestDecrypt(t *testing.T) {
 		})
 		t.Run("should fail if symmetric key length is invalid", func(t *testing.T) {
 			t.Parallel()
-			_, err := DecryptString("", "")
+			_, err := DecryptString("", "dummyciphertext")
 			require.Error(t, err)
 		})
 		t.Run("should fail if plaintext string is empty", func(t *testing.T) {
@@ -60,17 +60,22 @@ func TestDecrypt(t *testing.T) {
 		t.Run("should fail if symmetric key length is invalid", func(t *testing.T) {
 			t.Parallel()
 			invalidSymmetricKeyBytes := []byte("")
-			_, err := DecryptBytes(invalidSymmetricKeyBytes, nil)
+			_, err := DecryptBytes(invalidSymmetricKeyBytes, []byte("dummyciphertext"))
 			require.Error(t, err)
 		})
-		t.Run("should fail if plaintext bytes are empty", func(t *testing.T) {
+		t.Run("should fail if ciphertext bytes are empty", func(t *testing.T) {
 			t.Parallel()
 			_, err := DecryptBytes(validSymmetricKeyBytes, []byte{})
 			require.Error(t, err)
 		})
-		t.Run("should fail if plaintext bytes are nil", func(t *testing.T) {
+		t.Run("should fail if ciphertext bytes are nil", func(t *testing.T) {
 			t.Parallel()
 			_, err := DecryptBytes(validSymmetricKeyBytes, nil)
+			require.Error(t, err)
+		})
+		t.Run("should fail if ciphertext bytes is not at least the valid length of an initialization vector", func(t *testing.T) {
+			t.Parallel()
+			_, err := DecryptBytes(validSymmetricKeyBytes, []byte("tooshort"))
 			require.Error(t, err)
 		})
 	})
@@ -80,12 +85,12 @@ func TestDecrypt(t *testing.T) {
 			t.Parallel()
 			// create in file
 			expectedPlaintextBytes := []byte("skafiskafnjak")
-			inFilePath := randomStringOfLen(10)+"test_in_file.txt"
+			inFilePath := randomStringOfLen(10) + "test_in_file.txt"
 			require.NoError(t, os.WriteFile(inFilePath, expectedPlaintextBytes, 0777))
 			defer os.Remove(inFilePath)
 
 			// create out file
-			outFilePath := randomStringOfLen(10)+"test_out_file.txt"
+			outFilePath := randomStringOfLen(10) + "test_out_file.txt"
 			outFile, err := os.Create(outFilePath)
 			require.NoError(t, err)
 			defer func() {
@@ -103,7 +108,7 @@ func TestDecrypt(t *testing.T) {
 			require.NotEqual(t, expectedPlaintextBytes, ciphertextBytes)
 
 			// decrypt the out file contents into a new file
-			decryptedFilePath := randomStringOfLen(10)+"decrypted.txt"
+			decryptedFilePath := randomStringOfLen(10) + "decrypted.txt"
 			require.NoError(t, DecryptFile(validSymmetricKey, outFilePath, decryptedFilePath))
 			defer os.Remove(decryptedFilePath)
 
@@ -111,6 +116,10 @@ func TestDecrypt(t *testing.T) {
 			gotPlaintextBytes, err := os.ReadFile(decryptedFilePath)
 			require.NoError(t, err)
 			require.Equal(t, expectedPlaintextBytes, gotPlaintextBytes)
+		})
+		t.Run("should fail if file does not exist", func(t *testing.T) {
+			t.Parallel()
+			require.Error(t, DecryptFile(validSymmetricKey, "doesntexist", "doesntexist"))
 		})
 	})
 }
