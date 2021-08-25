@@ -28,3 +28,5 @@ jobs:
       uses: actions/checkout@v2
     - name: Tests
       run: make test
+    - name: Coverage Report
+      run: make mode=headless coverage
