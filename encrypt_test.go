@@ -8,12 +8,11 @@ import (
 )
 
 func TestEncrypt(t *testing.T) {
-	var (
-		validSymmetricKey      = "rand16CharString"
-		validSymmetricKeyBytes = []byte(validSymmetricKey)
-	)
+	t.Parallel()
 	t.Run("string", func(t *testing.T) {
+		t.Parallel()
 		t.Run("OK", func(t *testing.T) {
+			t.Parallel()
 			// encrypt
 			expected := "skafiskafnjak"
 			ciphertext, err := EncryptString(validSymmetricKey, expected)
@@ -21,16 +20,20 @@ func TestEncrypt(t *testing.T) {
 			require.NotEqual(t, expected, ciphertext)
 		})
 		t.Run("should fail if symmetric key length is invalid", func(t *testing.T) {
+			t.Parallel()
 			_, err := EncryptString("", "")
 			require.Error(t, err)
 		})
 		t.Run("should fail if plaintext string is empty", func(t *testing.T) {
+			t.Parallel()
 			_, err := EncryptString(validSymmetricKey, "")
 			require.Error(t, err)
 		})
 	})
 	t.Run("bytes", func(t *testing.T) {
+		t.Parallel()
 		t.Run("OK", func(t *testing.T) {
+			t.Parallel()
 			// encrypt
 			expected := []byte("skafiskafnjak")
 			ciphertext, err := EncryptBytes(validSymmetricKeyBytes, expected)
@@ -43,21 +46,26 @@ func TestEncrypt(t *testing.T) {
 			require.Equal(t, expected, got)
 		})
 		t.Run("should fail if symmetric key length is invalid", func(t *testing.T) {
+			t.Parallel()
 			invalidSymmetricKeyBytes := []byte("")
 			_, err := EncryptBytes(invalidSymmetricKeyBytes, nil)
 			require.Error(t, err)
 		})
 		t.Run("should fail if plaintext bytes are empty", func(t *testing.T) {
+			t.Parallel()
 			_, err := EncryptBytes(validSymmetricKeyBytes, []byte{})
 			require.Error(t, err)
 		})
 		t.Run("should fail if plaintext bytes are nil", func(t *testing.T) {
+			t.Parallel()
 			_, err := EncryptBytes(validSymmetricKeyBytes, nil)
 			require.Error(t, err)
 		})
 	})
 	t.Run("file", func(t *testing.T) {
+		t.Parallel()
 		t.Run("OK", func(t *testing.T) {
+			t.Parallel()
 			// create in file
 			expectedPlaintextBytes := []byte("skafiskafnjak")
 			inFilePath := "test_in_file.txt"

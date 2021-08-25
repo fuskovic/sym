@@ -1,6 +1,10 @@
-.PHONY: lint
-lint:
+.PHONY: fmt
+fmt:
 	@goimports -w *.go
+
+.PHONY: lint
+lint: fmt
+	@golangci-lint run -v
 
 .PHONY: test
 test:

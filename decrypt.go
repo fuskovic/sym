@@ -8,10 +8,16 @@ import (
 	"os"
 )
 
+// ErrEmptyPayload is returned when the ciphertext string or bytes provided for an encrypt/decrypt operation are empty or nil.
+var ErrEmptyPayload = errors.New("empty payload")
+
+// ErrInvalidIvLen is returned when the provided ciphertext for a decrypt operation is not at least the length of a valid initialization vector.
+var ErrInvalidIvLen = errors.New("cipher text does not contain a valid initialization vector length")
+
 // DecryptBytes uses key to return the decrypted content of 'ciphertextBytes'.
 func DecryptBytes(key, ciphertextBytes []byte) ([]byte, error) {
 	if len(ciphertextBytes) == 0 || ciphertextBytes == nil {
-		return nil, errors.New("empty payload")
+		return nil, ErrEmptyPayload
 	}
 
 	block, err := aes.NewCipher(key)
@@ -20,7 +26,7 @@ func DecryptBytes(key, ciphertextBytes []byte) ([]byte, error) {
 	}
 
 	if len(ciphertextBytes) < aes.BlockSize {
-		return nil, errors.New("cipher text does not contain a valid initialization vector length")
+		return nil, ErrInvalidIvLen
 	}
 
 	// Get the 16 byte IV.

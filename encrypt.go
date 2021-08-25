@@ -4,7 +4,6 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -13,7 +12,7 @@ import (
 // EncryptBytes uses key to encrypt plaintext; returning the ciphertext bytes.
 func EncryptBytes(key, plaintextBytes []byte) ([]byte, error) {
 	if len(plaintextBytes) == 0 || plaintextBytes == nil {
-		return nil, errors.New("empty payload")
+		return nil, ErrEmptyPayload
 	}
 
 	block, err := aes.NewCipher(key)
