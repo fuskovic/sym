@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-// EncryptBytes uses key to encrypt plaintext; returning the ciphertext bytes.
+// EncryptBytes uses key to encrypt plaintextBytes; returning the ciphertext bytes.
 func EncryptBytes(key string, plaintextBytes []byte) ([]byte, error) {
 	if len(plaintextBytes) == 0 || plaintextBytes == nil {
 		return nil, ErrEmptyPayload
@@ -21,20 +21,20 @@ func EncryptBytes(key string, plaintextBytes []byte) ([]byte, error) {
 	}
 
 	// Create a buffer big enough to hold the ciphertext + the IV.
-	ciphertext := make([]byte, aes.BlockSize+len(plaintextBytes))
+	ciphertextBytes := make([]byte, aes.BlockSize+len(plaintextBytes))
 
 	// First 16 bytes of the buffer will hold the IV.
-	iv := ciphertext[:aes.BlockSize]
+	iv := ciphertextBytes[:aes.BlockSize]
 
 	// Fill the IV with 16 random bytes
 	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
 		return nil, fmt.Errorf("failed to fill initialization vector: %w", err)
 	}
 
-	// Fill the rest of the buffer with the encrypted contents of plaintext.
+	// Fill the rest of the buffer with the encrypted contents of plaintextBytes.
 	stream := cipher.NewCFBEncrypter(block, iv)
-	stream.XORKeyStream(ciphertext[aes.BlockSize:], plaintextBytes)
-	return ciphertext, nil
+	stream.XORKeyStream(ciphertextBytes[aes.BlockSize:], plaintextBytes)
+	return ciphertextBytes, nil
 }
 
 // EncryptFile opens in and uses key to encrypt it's plaintext contents; writing the ciphertext contents to out.
