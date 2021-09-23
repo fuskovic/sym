@@ -15,9 +15,9 @@ func TestDecrypt(t *testing.T) {
 		t.Parallel()
 		t.Run("OK", func(t *testing.T) {
 			t.Parallel()
-			expected := "skafiskafnjak"
 
 			// encrypt
+			expected := "skafiskafnjak"
 			ciphertext, err := EncryptString(validSymmetricKey, expected)
 			require.NoError(t, err)
 			require.NotEqual(t, expected, ciphertext)
@@ -45,9 +45,8 @@ func TestDecrypt(t *testing.T) {
 		t.Run("OK", func(t *testing.T) {
 			t.Parallel()
 
-			expected := []byte("skafiskafnjak")
-
 			// encrypt
+			expected := []byte("skafiskafnjak")
 			ciphertext, err := EncryptBytes(validSymmetricKey, expected)
 			require.NoError(t, err)
 			require.NotEqual(t, expected, ciphertext)

@@ -33,12 +33,18 @@ func TestEncrypt(t *testing.T) {
 		t.Parallel()
 		t.Run("OK", func(t *testing.T) {
 			t.Parallel()
+
+			// encrypt
 			expected := []byte("skafiskafnjak")
 			ciphertext, err := EncryptBytes(validSymmetricKey, expected)
 			require.NoError(t, err)
 			require.NotEqual(t, expected, ciphertext)
+
+			// decrypt
 			got, err := DecryptBytes(validSymmetricKey, ciphertext)
 			require.NoError(t, err)
+
+			// assert equality
 			require.Equal(t, expected, got)
 		})
 		t.Run("should fail if symmetric key length is invalid", func(t *testing.T) {
@@ -62,6 +68,7 @@ func TestEncrypt(t *testing.T) {
 		t.Parallel()
 		t.Run("OK", func(t *testing.T) {
 			t.Parallel()
+
 			// setup
 			expected := randomBytesOfLen(t, 10)
 			inFilePath, outFilePath, cleanUp := setupTestFiles(t, expected)
