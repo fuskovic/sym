@@ -3,7 +3,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/fuskovic/sym.svg)](https://pkg.go.dev/github.com/fuskovic/sym)
 [![Go Report Card](https://goreportcard.com/badge/github.com/fuskovic/sym)](https://goreportcard.com/report/github.com/fuskovic/sym)
 <a href='https://github.com/jpoles1/gopherbadger' target='_blank'>![gopherbadger-tag-do-not-edit](https://img.shields.io/badge/Go%20Coverage-94%25-brightgreen.svg?longCache=true&style=flat)</a>
-
+![CI](https://github.com/fuskovic/sym/actions/workflows/ci.yaml/badge.svg)
 
 A small and lightweight symmetric encryption/decryption package.
 
