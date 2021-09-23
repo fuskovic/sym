@@ -1,10 +1,8 @@
 package sym
 
 import (
-	"math/rand"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/require"
 )
@@ -64,45 +62,23 @@ func TestEncrypt(t *testing.T) {
 		t.Parallel()
 		t.Run("OK", func(t *testing.T) {
 			t.Parallel()
-			// create in file
-			expectedPlaintextBytes := []byte("skafiskafnjak")
-			inFilePath := randomStringOfLen(10) + "test_in_file.txt"
-			require.NoError(t, os.WriteFile(inFilePath, expectedPlaintextBytes, 0777))
-			defer func() {
-				_ = os.Remove(inFilePath)
-			}()
-
-			// create out file
-			outFilePath := randomStringOfLen(11) + "test_out_file.txt"
-			outFile, err := os.Create(outFilePath)
-			require.NoError(t, err)
-			defer func() {
-				_ = outFile.Close()
-				_ = os.Remove(outFilePath)
-			}()
+			// setup
+			expected := randomBytesOfLen(t, 10)
+			inFilePath, outFilePath, cleanUp := setupTestFiles(t, expected)
+			defer cleanUp()
 
 			// encrypt
 			require.NoError(t, EncryptFile(validSymmetricKey, inFilePath, outFilePath))
 
-			// assert that the ciphertext has been written to the out file.
+			// assert the encrypted contents have been written to the outfile
 			ciphertextBytes, err := os.ReadFile(outFilePath)
 			require.NoError(t, err)
 			require.NotNil(t, ciphertextBytes)
-			require.NotEqual(t, expectedPlaintextBytes, ciphertextBytes)
+			require.NotEqual(t, expected, ciphertextBytes)
 		})
 		t.Run("should fail if file does not exist", func(t *testing.T) {
 			t.Parallel()
 			require.Error(t, EncryptFile(validSymmetricKey, "doesntexist", "doesntexist"))
 		})
 	})
-}
-
-func randomStringOfLen(n int) string {
-	letters := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-	rand.Seed(time.Now().UnixNano())
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
-	}
-	return string(b)
 }
