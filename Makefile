@@ -13,3 +13,7 @@ test:
 .PHONY: coverage
 coverage:
 	@./scripts/generate_test_coverage_report.sh $(mode)
+
+.PHONY: update_badge
+update_badge:
+	@gopherbadger -md="README.md" -png=false
