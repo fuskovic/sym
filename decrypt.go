@@ -51,7 +51,7 @@ func DecryptFile(key, in, out string) error {
 
 	plaintextBytes, err := DecryptBytes(key, ciphertextBytes)
 	if err != nil {
-		return fmt.Errorf("failed to encrypt %q: %w", in, err)
+		return fmt.Errorf("failed to decrypt %q: %w", in, err)
 	}
 	return os.WriteFile(out, plaintextBytes, 0777)
 }
