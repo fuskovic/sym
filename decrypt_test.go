@@ -114,6 +114,13 @@ func TestDecrypt(t *testing.T) {
 			require.NoError(t, err)
 			require.Equal(t, expected, got)
 		})
+		t.Run("should fail if symmetric key length is invalid", func(t *testing.T) {
+			t.Parallel()
+			expected := randomBytesOfLen(t, 10)
+			inFilePath, outFilePath, cleanUp := setupTestFiles(t, expected)
+			defer cleanUp()
+			require.Error(t, DecryptFile("", inFilePath, outFilePath))
+		})
 		t.Run("should fail if file does not exist", func(t *testing.T) {
 			t.Parallel()
 			key := randomStringOfLen(t, 16)
