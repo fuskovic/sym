@@ -8,7 +8,7 @@ lint:
 
 .PHONY: test
 test:
-	@go test -v . 
+	@go clean -testcache && go test -v . 
 
 .PHONY: coverage
 coverage:
