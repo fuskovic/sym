@@ -7,8 +7,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-const validSymmetricKey = "rand16CharString"
-
 func TestDecrypt(t *testing.T) {
 	t.Parallel()
 	t.Run("string", func(t *testing.T) {
@@ -17,13 +15,14 @@ func TestDecrypt(t *testing.T) {
 			t.Parallel()
 
 			// encrypt
+			key := randomStringOfLen(t, 16)
 			expected := randomStringOfLen(t, 10)
-			ciphertext, err := EncryptString(validSymmetricKey, expected)
+			ciphertext, err := EncryptString(key, expected)
 			require.NoError(t, err)
 			require.NotEqual(t, expected, ciphertext)
 
 			// decrypt
-			got, err := DecryptString(validSymmetricKey, ciphertext)
+			got, err := DecryptString(key, ciphertext)
 			require.NoError(t, err)
 
 			// assert equality
@@ -36,7 +35,8 @@ func TestDecrypt(t *testing.T) {
 		})
 		t.Run("should fail if plaintext string is empty", func(t *testing.T) {
 			t.Parallel()
-			_, err := DecryptString(validSymmetricKey, "")
+			key := randomStringOfLen(t, 16)
+			_, err := DecryptString(key, "")
 			require.Equal(t, err, ErrEmptyPayload)
 		})
 	})
@@ -46,13 +46,14 @@ func TestDecrypt(t *testing.T) {
 			t.Parallel()
 
 			// encrypt
+			key := randomStringOfLen(t, 16)
 			expected := randomBytesOfLen(t, 10)
-			ciphertext, err := EncryptBytes(validSymmetricKey, expected)
+			ciphertext, err := EncryptBytes(key, expected)
 			require.NoError(t, err)
 			require.NotEqual(t, expected, ciphertext)
 
 			// decrypt
-			got, err := DecryptBytes(validSymmetricKey, ciphertext)
+			got, err := DecryptBytes(key, ciphertext)
 			require.NoError(t, err)
 
 			// assert equality
@@ -66,17 +67,20 @@ func TestDecrypt(t *testing.T) {
 		})
 		t.Run("should fail if ciphertext bytes are empty", func(t *testing.T) {
 			t.Parallel()
-			_, err := DecryptBytes(validSymmetricKey, []byte{})
+			key := randomStringOfLen(t, 16)
+			_, err := DecryptBytes(key, []byte{})
 			require.Equal(t, err, ErrEmptyPayload)
 		})
 		t.Run("should fail if ciphertext bytes are nil", func(t *testing.T) {
 			t.Parallel()
-			_, err := DecryptBytes(validSymmetricKey, nil)
+			key := randomStringOfLen(t, 16)
+			_, err := DecryptBytes(key, nil)
 			require.Equal(t, err, ErrEmptyPayload)
 		})
 		t.Run("should fail if ciphertext bytes is not at least the valid length of an initialization vector", func(t *testing.T) {
 			t.Parallel()
-			_, err := DecryptBytes(validSymmetricKey, []byte("tooshort"))
+			key := randomStringOfLen(t, 16)
+			_, err := DecryptBytes(key, []byte("tooshort"))
 			require.Equal(t, ErrInvalidIvLen, err)
 		})
 	})
@@ -91,7 +95,8 @@ func TestDecrypt(t *testing.T) {
 			defer cleanUp()
 
 			// encrypt
-			require.NoError(t, EncryptFile(validSymmetricKey, inFilePath, outFilePath))
+			key := randomStringOfLen(t, 16)
+			require.NoError(t, EncryptFile(key, inFilePath, outFilePath))
 
 			// assert ciphertext has been written to out file
 			ciphertextBytes, err := os.ReadFile(outFilePath)
@@ -101,7 +106,7 @@ func TestDecrypt(t *testing.T) {
 
 			// decrypt
 			decryptedFilePath := randomStringOfLen(t, 10) + "decrypted.txt"
-			require.NoError(t, DecryptFile(validSymmetricKey, outFilePath, decryptedFilePath))
+			require.NoError(t, DecryptFile(key, outFilePath, decryptedFilePath))
 			defer os.Remove(decryptedFilePath)
 
 			// assert equality
@@ -111,7 +116,8 @@ func TestDecrypt(t *testing.T) {
 		})
 		t.Run("should fail if file does not exist", func(t *testing.T) {
 			t.Parallel()
-			require.Error(t, DecryptFile(validSymmetricKey, "doesntexist", "doesntexist"))
+			key := randomStringOfLen(t, 16)
+			require.Error(t, DecryptFile(key, "doesntexist", "doesntexist"))
 		})
 	})
 }
