@@ -37,7 +37,7 @@ func TestDecrypt(t *testing.T) {
 		t.Run("should fail if plaintext string is empty", func(t *testing.T) {
 			t.Parallel()
 			_, err := DecryptString(validSymmetricKey, "")
-			require.Error(t, err)
+			require.Equal(t, err, ErrEmptyPayload)
 		})
 	})
 	t.Run("bytes", func(t *testing.T) {
@@ -67,17 +67,17 @@ func TestDecrypt(t *testing.T) {
 		t.Run("should fail if ciphertext bytes are empty", func(t *testing.T) {
 			t.Parallel()
 			_, err := DecryptBytes(validSymmetricKey, []byte{})
-			require.Error(t, err)
+			require.Equal(t, err, ErrEmptyPayload)
 		})
 		t.Run("should fail if ciphertext bytes are nil", func(t *testing.T) {
 			t.Parallel()
 			_, err := DecryptBytes(validSymmetricKey, nil)
-			require.Error(t, err)
+			require.Equal(t, err, ErrEmptyPayload)
 		})
 		t.Run("should fail if ciphertext bytes is not at least the valid length of an initialization vector", func(t *testing.T) {
 			t.Parallel()
 			_, err := DecryptBytes(validSymmetricKey, []byte("tooshort"))
-			require.Error(t, err)
+			require.Equal(t, ErrInvalidIvLen, err)
 		})
 	})
 	t.Run("file", func(t *testing.T) {

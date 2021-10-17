@@ -26,7 +26,7 @@ func TestEncrypt(t *testing.T) {
 		t.Run("should fail if plaintext string is empty", func(t *testing.T) {
 			t.Parallel()
 			_, err := EncryptString(validSymmetricKey, "")
-			require.Error(t, err)
+			require.Equal(t, err, ErrEmptyPayload)
 		})
 	})
 	t.Run("bytes", func(t *testing.T) {
@@ -56,12 +56,12 @@ func TestEncrypt(t *testing.T) {
 		t.Run("should fail if plaintext bytes are empty", func(t *testing.T) {
 			t.Parallel()
 			_, err := EncryptBytes(validSymmetricKey, []byte{})
-			require.Error(t, err)
+			require.Equal(t, err, ErrEmptyPayload)
 		})
 		t.Run("should fail if plaintext bytes are nil", func(t *testing.T) {
 			t.Parallel()
 			_, err := EncryptBytes(validSymmetricKey, nil)
-			require.Error(t, err)
+			require.Equal(t, err, ErrEmptyPayload)
 		})
 	})
 	t.Run("file", func(t *testing.T) {
