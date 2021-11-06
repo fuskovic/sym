@@ -19,6 +19,7 @@ Only external dependency is [stretchr/testify](https://github.com/stretchr/testi
 
 ## Encrypt/Decrypt Strings
 
+```go
     // The key needs to be either 16, 24, or 32 characters in length
     key := os.Getenv("SYMMETRIC_KEY")
 
@@ -31,9 +32,11 @@ Only external dependency is [stretchr/testify](https://github.com/stretchr/testi
     if err != nil {
         // handle error
     }
+```
 
 ## Encrypt/Decrypt Bytes
 
+```go
     // The key needs to be either 16, 24, or 32 characters in length
     key := os.Getenv("SYMMETRIC_KEY")
 
@@ -46,9 +49,11 @@ Only external dependency is [stretchr/testify](https://github.com/stretchr/testi
     if err != nil {
         // handle error
     }
+```
 
 ## Encrypt/Decrypt Files
 
+```go
     // The key needs to be either 16, 24, or 32 characters in length
     key := os.Getenv("SYMMETRIC_KEY")
 
@@ -69,3 +74,4 @@ Only external dependency is [stretchr/testify](https://github.com/stretchr/testi
     if err != nil {
         // handle error
     }
+```
