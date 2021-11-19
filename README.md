@@ -5,11 +5,7 @@
 <a href='https://github.com/jpoles1/gopherbadger' target='_blank'>![gopherbadger-tag-do-not-edit](https://img.shields.io/badge/Go%20Coverage-98%25-brightgreen.svg?longCache=true&style=flat)</a>
 ![CI](https://github.com/fuskovic/sym/actions/workflows/ci.yaml/badge.svg)
 
-A small and lightweight symmetric encryption/decryption package.
-
-Useful for encrypting and decrypting strings, bytes, and files.
-
-Only external dependency is [stretchr/testify](https://github.com/stretchr/testify) for the unit tests.
+A light wrapper around how you would use the standard library for symmetric encryption/decryption anyway.
 
 # Install
 
