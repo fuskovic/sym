@@ -13,11 +13,26 @@ A light wrapper around how you would use the standard library for symmetric encr
 
 # Examples
 
+## Generate a Key
+
+```go
+
+    // use KeyGen if you want a specific size
+    key, err := sym.KeyGen(32)
+    if err != nil {
+        // handle err
+    }
+
+    // or use MustKeyGen to generate a default size (16) key
+    key := sym.MustKeyGen()
+
+```
+
 ## Encrypt/Decrypt Strings
 
 ```go
-    // The key needs to be either 16, 24, or 32 characters in length
-    key := os.Getenv("SYMMETRIC_KEY")
+
+    key := sym.MustKeyGen()
 
     ciphertext, err := sym.EncryptString(key, "hello world")
     if err != nil {
@@ -33,8 +48,8 @@ A light wrapper around how you would use the standard library for symmetric encr
 ## Encrypt/Decrypt Bytes
 
 ```go
-    // The key needs to be either 16, 24, or 32 characters in length
-    key := os.Getenv("SYMMETRIC_KEY")
+
+    key := sym.MustKeyGen()
 
     ciphertext, err := sym.EncryptBytes(key, []byte("hello world"))
     if err != nil {
@@ -50,8 +65,8 @@ A light wrapper around how you would use the standard library for symmetric encr
 ## Encrypt/Decrypt Files
 
 ```go
-    // The key needs to be either 16, 24, or 32 characters in length
-    key := os.Getenv("SYMMETRIC_KEY")
+
+    key := sym.MustKeyGen()
 
     err := sym.EncryptFile(key,
         "/path/to/existing/plaintext/file.txt",

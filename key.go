@@ -3,18 +3,20 @@ package sym
 import (
 	"crypto/aes"
 	"crypto/rand"
+	"os"
 	"slices"
 )
+
+var validKeySizes = []int{16, 24, 32}
+
 
 // MustKeyGen generates a new key that can be used to encrypt/decrypt
 // strings, byte-data, and files. If size is not 16, 32, or 32
 // a non-nil error will be returned.
 func KeyGen(size int) (string, error) {
-	validKeySizes := []int{16, 24, 32}
 	if !slices.Contains(validKeySizes, size) {
 		return "", aes.KeySizeError(size)
 	}
-
 	key := make([]byte, 64)
 	if _, err := rand.Read(key); err != nil {
 		return "", err
@@ -28,4 +30,17 @@ func MustKeyGen() string {
 	key := make([]byte, size)
 	rand.Read(key)
 	return string(key)
+}
+
+// KeyFromFile reads the file at path, validates the key,
+// and then returns it.
+func KeyFromFilePath(path string) (string, error) {
+	b, err := os.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+	if size := len(b); !slices.Contains(validKeySizes, size) {
+		return "", aes.KeySizeError(size)
+	}
+	return string(b), nil
 }
