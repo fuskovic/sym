@@ -9,7 +9,6 @@ import (
 
 var validKeySizes = []int{16, 24, 32}
 
-
 // MustKeyGen generates a new key that can be used to encrypt/decrypt
 // strings, byte-data, and files. If size is not 16, 32, or 32
 // a non-nil error will be returned.
@@ -33,7 +32,8 @@ func MustKeyGen() string {
 }
 
 // KeyFromFile reads the file at path, validates the key,
-// and then returns it.
+// and then returns it. If the file does not exist a non-nil error is returned.
+// If the file exists and the key is invalid a non-nil error is returned.
 func KeyFromFilePath(path string) (string, error) {
 	b, err := os.ReadFile(path)
 	if err != nil {

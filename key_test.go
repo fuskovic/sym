@@ -42,3 +42,35 @@ func TestKeyGen(t *testing.T) {
 		require.Nil(t, k)
 	})
 }
+
+func TestKeyFromFilePath(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should fail", func(t *testing.T) {
+		t.Parallel()
+		t.Run("if file does not exist", func(t *testing.T) {
+			t.Parallel()
+			k, err := KeyFromFilePath("/does/not.exist")
+			require.Error(t, err)
+			require.Empty(t, k)
+		})
+		t.Run("if key file has invalid key", func(t *testing.T) {
+			t.Parallel()
+			infile, _, cleanup := setupTestFiles(t, []byte("invalidkey"))
+			defer cleanup()
+			k, err := KeyFromFilePath(infile)
+			require.Empty(t, k)
+			require.Error(t, err)
+			require.Contains(t, err.Error(), "invalid key size")
+		})
+	})
+
+	t.Run("should pass", func(t *testing.T) {
+		expectedKey := MustKeyGen()
+		inFile, _, cleanup := setupTestFiles(t, []byte(expectedKey))
+		defer cleanup()
+		gotKey, err := KeyFromFilePath(inFile)
+		require.NoError(t, err)
+		require.Equal(t, expectedKey, gotKey)
+	})
+}
