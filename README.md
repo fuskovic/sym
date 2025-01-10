@@ -28,6 +28,17 @@ A light wrapper around how you would use the standard library for symmetric encr
 
 ```
 
+## Use key from file
+
+```go
+
+    key, err := sym.KeyFromFilePath("/path/to/my.key")
+    if err != nil {
+        // handle err
+    }
+
+```
+
 ## Encrypt/Decrypt Strings
 
 ```go
@@ -43,6 +54,7 @@ A light wrapper around how you would use the standard library for symmetric encr
     if err != nil {
         // handle error
     }
+
 ```
 
 ## Encrypt/Decrypt Bytes
@@ -60,6 +72,7 @@ A light wrapper around how you would use the standard library for symmetric encr
     if err != nil {
         // handle error
     }
+
 ```
 
 ## Encrypt/Decrypt Files
@@ -85,4 +98,5 @@ A light wrapper around how you would use the standard library for symmetric encr
     if err != nil {
         // handle error
     }
+    
 ```
