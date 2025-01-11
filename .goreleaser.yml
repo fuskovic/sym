@@ -1,6 +1,6 @@
 project_name: sym
 builds:
-  - main: .
+  - main: ./cmd/sym/
     env:
       - CGO_ENABLED=0
     goos:

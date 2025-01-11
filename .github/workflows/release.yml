@@ -28,7 +28,5 @@ jobs:
         with:
           version: latest
           args: release --clean -p 2
-        builds:
-          - main: ./cmd/sym/
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
