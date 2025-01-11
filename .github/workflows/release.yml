@@ -2,7 +2,8 @@ on:
   push:
     tags:
       - "*"
-on: workflow_dispatch
+  
+  workflow_dispatch:
 
 
 jobs:
