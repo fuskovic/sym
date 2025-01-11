@@ -17,3 +17,7 @@ coverage:
 .PHONY: update_badge
 update_badge:
 	@gopherbadger -md="README.md" -png=false
+
+.PHONY: refresh
+refresh:
+	@GOPROXY=proxy.golang.org go list -m github.com/fuskovic/sym@latest
