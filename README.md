@@ -5,9 +5,41 @@
 <a href='https://github.com/jpoles1/gopherbadger' target='_blank'>![gopherbadger-tag-do-not-edit](https://img.shields.io/badge/Go%20Coverage-98%25-brightgreen.svg?longCache=true&style=flat)</a>
 ![CI](https://github.com/fuskovic/sym/actions/workflows/ci.yaml/badge.svg)
 
-A light wrapper around how you would use the standard library for symmetric encryption/decryption anyway.
+Can be used as an importable pkg or as a CLI.
 
-# Install
+# Use as a CLI
+
+    go install github.com/fuskovic/sym/cmd/sym@latest
+
+# Examples
+
+## Generate a Key
+
+    // default key size is 16
+    sym keygen
+
+    // other valid sizes include 24, and 32
+    sym keygen --size 32
+
+    // output to a file
+    sym keygen -o key.txt
+
+## Encrypt a file
+
+    sym encrypt \
+        -f key.txt \
+        -i inputfile.txt \
+        -o outputfile.enc
+
+## Decrypt a file
+
+    sym decrypt \
+        -f key.txt \
+        -i ciphertext.enc \
+        -o plaintext.txt
+
+
+# Use as a library
 
     go get -u github.com/fuskovic/sym
 

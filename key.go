@@ -3,7 +3,6 @@ package sym
 import (
 	"crypto/aes"
 	"crypto/rand"
-	"encoding/hex"
 	"os"
 	"slices"
 )
@@ -21,7 +20,7 @@ func KeyGen(size int) (string, error) {
 	if _, err := rand.Read(key); err != nil {
 		return "", err
 	}
-	return hex.EncodeToString(key), nil
+	return string(key), nil
 }
 
 // MustKeyGen always generates a size 16 key.
