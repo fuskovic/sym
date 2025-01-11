@@ -46,7 +46,7 @@ var root = &cobra.Command{
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		if shouldOutputVersion {
-			println("v1.1.0")
+			println("v1.2.0")
 			return
 		}
 		cmd.Usage()
