@@ -32,6 +32,12 @@ func TestKeyGen(t *testing.T) {
 				k, err := KeyGen(test.input)
 				require.NoError(t, err)
 				require.NotNil(t, k)
+				s := randomStringOfLen(t, 10)
+				cipherText, err := EncryptString(k, s)
+				require.NoError(t, err)
+				plainText, err := DecryptString(k, cipherText)
+				require.NoError(t, err)
+				require.Equal(t, s, plainText)
 			})
 		}
 	})
@@ -39,7 +45,7 @@ func TestKeyGen(t *testing.T) {
 		t.Parallel()
 		k, err := KeyGen(10)
 		require.Error(t, err)
-		require.Nil(t, k)
+		require.Empty(t, k)
 	})
 }
 
@@ -72,5 +78,11 @@ func TestKeyFromFilePath(t *testing.T) {
 		gotKey, err := KeyFromFilePath(inFile)
 		require.NoError(t, err)
 		require.Equal(t, expectedKey, gotKey)
+		s := randomStringOfLen(t, 10)
+		cipherText, err := EncryptString(gotKey, s)
+		require.NoError(t, err)
+		plainText, err := DecryptString(gotKey, cipherText)
+		require.NoError(t, err)
+		require.Equal(t, s, plainText)
 	})
 }

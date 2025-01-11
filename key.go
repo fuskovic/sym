@@ -16,7 +16,7 @@ func KeyGen(size int) (string, error) {
 	if !slices.Contains(validKeySizes, size) {
 		return "", aes.KeySizeError(size)
 	}
-	key := make([]byte, 64)
+	key := make([]byte, size)
 	if _, err := rand.Read(key); err != nil {
 		return "", err
 	}
